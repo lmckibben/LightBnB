@@ -144,7 +144,7 @@ exports.getAllReservations = getAllReservations;
     if(queryParams.length > 0) {
       queryString += 'AND '
     }
-    queryParams.push(parseInt(`${options.minimum_price_per_night}`));
+    queryParams.push(`${options.minimum_price_per_night}`);
     queryString += `cost_per_night >= $${queryParams.length} `;
   }
 
@@ -156,7 +156,7 @@ exports.getAllReservations = getAllReservations;
     if(queryParams.length > 0) {
       queryString += 'AND '
     }
-    queryParams.push(parseInt(`${options.maximum_price_per_night}`));
+    queryParams.push(`${options.maximum_price_per_night}`);
     queryString += `cost_per_night <= $${queryParams.length} `;
   }
 
