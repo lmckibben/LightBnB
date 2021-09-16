@@ -1,6 +1,7 @@
 const properties = require('./json/properties.json');
 const users = require('./json/users.json');
 const { Pool } = require('pg');
+const res = require('express/lib/response');
 
 const pool = new Pool({
   user: 'vagrant',
@@ -79,7 +80,17 @@ exports.addUser = addUser;
  * @return {Promise<[{}]>} A promise to the reservations.
  */
 const getAllReservations = function(guest_id, limit = 10) {
-  return getAllProperties(null, 2);
+  return pool
+  .query(`SELECT * FROM reservations
+          JOIN properties ON reservations.property_id = properties.id
+          WHERE guest_id = $1
+          LIMIT $2`, [guest_id, limit])
+  .then((result) => {
+    return result.rows;
+  })
+  .catch((err) => {
+    console.log('error:', err.message);
+  });
 }
 exports.getAllReservations = getAllReservations;
 
