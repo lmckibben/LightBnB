@@ -86,6 +86,7 @@ const getAllReservations = function(guest_id, limit = 10) {
           WHERE guest_id = $1
           LIMIT $2`, [guest_id, limit])
   .then((result) => {
+    console.log(result)
     return result.rows;
   })
   .catch((err) => {
@@ -113,60 +114,47 @@ exports.getAllReservations = getAllReservations;
   `;
 
   // 3
-  let addWHERE = 'WHERE'
 
   if (options.city) {
-    if (addWHERE) {
-      queryString += 'WHERE ';
-      addWHERE = ''
-    }
     queryParams.push(`%${options.city.charAt(0).toUpperCase() + options.city.slice(1)}%`);
-    queryString += `city LIKE $${queryParams.length} `;
+    queryString += `WHERE city LIKE $${queryParams.length} `;
   }
 
   if (options.owner_id) {
-    if (addWHERE) {
-      queryString += 'WHERE ';
-      addWHERE = ''
-    }
     if(queryParams.length > 0) {
       queryString += 'AND '
+    } else {
+      queryString += 'WHERE '
     }
     queryParams.push(parseInt(`${options.owner_id}`));
     queryString += `owner_id = $${queryParams.length} `;
   }
 
   if (options.minimum_price_per_night) {
-    if (addWHERE) {
-      queryString += 'WHERE ';
-      addWHERE = ''
-    }
     if(queryParams.length > 0) {
       queryString += 'AND '
+    } else {
+      queryString += 'WHERE '
     }
     queryParams.push(`${options.minimum_price_per_night}`);
     queryString += `cost_per_night >= $${queryParams.length} `;
   }
 
   if (options.maximum_price_per_night) {
-    if (addWHERE) {
-      queryString += 'WHERE ';
-      addWHERE = ''
-    }
     if(queryParams.length > 0) {
       queryString += 'AND '
+    } else {
+      queryString += 'WHERE '
     }
     queryParams.push(`${options.maximum_price_per_night}`);
     queryString += `cost_per_night <= $${queryParams.length} `;
   }
 
   if (options.minimum_rating) {
-    if (addWHERE) {
-      queryString += 'WHERE ';
-      addWHERE = ''
-    }
     if(queryParams.length > 0) {
       queryString += 'AND '
+    } else {
+      queryString += 'WHERE '
     }
     queryParams.push(parseInt(`${options.minimum_rating}`));
     queryString += `rating >= $${queryParams.length} `;
